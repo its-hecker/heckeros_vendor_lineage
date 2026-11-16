@@ -221,6 +221,20 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 		}
 	}
 
+	// Stage Bionic header-cleaning tools inside the kernel sbox.
+	if ctx.ModuleName() == "generated_kernel_includes" {
+		for _, source := range []string{
+			"bionic/libc/kernel/tools/clean_header.py",
+			"bionic/libc/kernel/tools/cpp.py",
+			"bionic/libc/kernel/tools/defaults.py",
+			"bionic/libc/kernel/tools/kernel.py",
+			"bionic/libc/kernel/tools/utils.py",
+		} {
+			g.inputDeps = append(
+				g.inputDeps, android.PathForSource(ctx, source))
+		}
+	}
+
 	cmd := lineageExpandVariables(ctx, String(g.properties.Cmd))
 
 	rawCommand, err := android.Expand(cmd, func(name string) (string, error) {
