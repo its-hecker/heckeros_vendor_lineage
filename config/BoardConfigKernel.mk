@@ -218,7 +218,7 @@ endif
 # This needs to be an absolute path, so only set this if the standard out dir isn't used
 OUT_DIR_PREFIX := $(shell echo $(OUT_DIR) | sed -e 's|/target/.*$$||g')
 KERNEL_BUILD_OUT_PREFIX :=
-ifeq ($(OUT_DIR_PREFIX),out)
+ifneq ($(filter out out-nonksu,$(OUT_DIR_PREFIX)),)
     KERNEL_BUILD_OUT_PREFIX := $(BUILD_TOP)/
 endif
 
